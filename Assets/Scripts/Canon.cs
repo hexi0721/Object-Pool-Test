@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Canon : MonoBehaviour
@@ -7,19 +8,22 @@ public class Canon : MonoBehaviour
     [SerializeField] private GameObject notUseParent;
     [SerializeField] private GameObject useParent;
     [SerializeField] private NormalBullet normalBulletPrefab;
-    [SerializeField] private float existTime = 5f;
-    [SerializeField] private float force = 1000f;
+    [SerializeField] private float existTime;
+    [SerializeField] private float force;
     [SerializeField] private Vector3 offset = new Vector3(0, 0, 0.5f);
     [SerializeField] private int bulletCount;
     [SerializeField] private int preWarmCount;
     [SerializeField] private bool isUseObjectPool;
     private MyObjectPool myObjectPool = new MyObjectPool();
     private Action currentAction;
+    private WaitForSeconds waitForExistTime;
 
     public void Init()
     {
-        //myObjectPool.Init(normalBulletPrefab, useParent , preWarmCount);
-        currentAction = NotUseObjectPool;
+        myObjectPool.Init(normalBulletPrefab, useParent, preWarmCount);
+        currentAction = isUseObjectPool ? UseObjectPool : NotUseObjectPool;
+
+        waitForExistTime = new WaitForSeconds(existTime);
     }
 
     public void Change()
@@ -41,7 +45,7 @@ public class Canon : MonoBehaviour
         NormalBullet bullet = Instantiate(normalBulletPrefab, transform.position + offset, Quaternion.identity);
         bullet.SetUp(notUseParent);
         bullet.Move(force);
-        StartCoroutine(bullet.Delete(existTime));
+        Destroy(bullet.gameObject, existTime);
     }
 
     private void UseObjectPool()
@@ -49,7 +53,13 @@ public class Canon : MonoBehaviour
         NormalBullet bullet = myObjectPool.Creat(transform.position + offset, Quaternion.identity);
         bullet.SetUp(useParent);
         bullet.Move(force);
-        StartCoroutine(bullet.Recycle(existTime));
+        StartCoroutine(DelayRecycle(bullet));
+    }
+
+    private IEnumerator DelayRecycle(NormalBullet bullet)
+    {
+        yield return waitForExistTime;
+        myObjectPool.Recycle(bullet);
     }
 
 }

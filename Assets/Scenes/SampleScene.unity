@@ -1592,10 +1592,11 @@ MonoBehaviour:
   notUseParent: {fileID: 1136731145}
   useParent: {fileID: 1726758873}
   normalBulletPrefab: {fileID: 793789475349396160, guid: 35a0b4df7924d1e4cb8c57bb64ec48a2, type: 3}
-  existTime: 1
+  existTime: 2
   force: 25
   offset: {x: 0, y: 0, z: 0.5}
-  bulletCount: 400
+  bulletCount: 1000
+  preWarmCount: 10000
   isUseObjectPool: 1
 --- !u!1 &1563577071
 GameObject:

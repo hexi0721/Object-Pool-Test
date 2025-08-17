@@ -7,10 +7,9 @@ public class MyObjectPool
     private Queue<NormalBullet> queue = new Queue<NormalBullet>();
     List<NormalBullet> start = new List<NormalBullet>();
 
-    public void Init(NormalBullet prefab, GameObject useParent , int preWarmCount)
+    public void Init(NormalBullet prefab, GameObject useParent, int preWarmCount)
     {
         this.prefab = prefab;
-
 
         for (int i = 0; i < preWarmCount; i++)
         {
@@ -24,7 +23,7 @@ public class MyObjectPool
 
         for (int i = 0; i < start.Count; i++)
         {
-            OnRecycle(start[i]);
+            Recycle(start[i]);
         }
     }
 
@@ -38,15 +37,14 @@ public class MyObjectPool
         }
 
         NormalBullet bullet = queue.Dequeue();
-        bullet.Init(OnRecycle);
         bullet.transform.position = pos;
         bullet.transform.rotation = quaternion;
         bullet.gameObject.SetActive(true);
 
         return bullet;
     }
-
-    private void OnRecycle(NormalBullet bullet)
+    
+    public void Recycle(NormalBullet bullet)
     {
         bullet.gameObject.SetActive(false);
         queue.Enqueue(bullet);
