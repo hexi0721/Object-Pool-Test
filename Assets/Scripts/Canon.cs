@@ -43,7 +43,7 @@ public class Canon : MonoBehaviour
     private void NotUseObjectPool()
     {
         NormalBullet bullet = Instantiate(normalBulletPrefab, transform.position + offset, Quaternion.identity);
-        bullet.SetUp(notUseParent);
+        bullet.SetUp(notUseParent , existTime);
         bullet.Move(force);
         Destroy(bullet.gameObject, existTime);
     }
@@ -51,7 +51,7 @@ public class Canon : MonoBehaviour
     private void UseObjectPool()
     {
         NormalBullet bullet = myObjectPool.Creat(transform.position + offset, Quaternion.identity);
-        bullet.SetUp(useParent);
+        bullet.SetUp(useParent , existTime);
         bullet.Move(force);
         StartCoroutine(DelayRecycle(bullet));
     }

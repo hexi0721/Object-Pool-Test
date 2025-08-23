@@ -33,6 +33,7 @@ public class MyObjectPool
         if (queue.Count <= 0)
         {
             NormalBullet t = Object.Instantiate(prefab);
+            t.Init(Recycle);
             queue.Enqueue(t);
         }
 
