@@ -15,15 +15,19 @@ public class Canon : MonoBehaviour
     [SerializeField] private int preWarmCount;
     [SerializeField] private bool isUseObjectPool;
     private MyObjectPool myObjectPool = new MyObjectPool();
+    private ObjectPool objectPool = new ObjectPool();
     private Action currentAction;
     private WaitForSeconds waitForExistTime;
 
     public void Init()
     {
         myObjectPool.Init(normalBulletPrefab, useParent, preWarmCount);
+        objectPool.Init(normalBulletPrefab, preWarmCount);
+
         currentAction = isUseObjectPool ? UseObjectPool : NotUseObjectPool;
 
         waitForExistTime = new WaitForSeconds(existTime);
+
     }
 
     public void Change()
@@ -53,7 +57,16 @@ public class Canon : MonoBehaviour
         NormalBullet bullet = myObjectPool.Creat(transform.position + offset, Quaternion.identity);
         bullet.SetUp(useParent , existTime);
         bullet.Move(force);
-        StartCoroutine(DelayRecycle(bullet));
+        //StartCoroutine(DelayRecycle(bullet));
+    }
+
+    private void UseObjectPool1()
+    {
+        NormalBullet bullet = objectPool.Get();
+        bullet.transform.position = transform.position + offset;
+        bullet.transform.rotation = Quaternion.identity;
+        bullet.SetUp(useParent , existTime);
+        bullet.Move(force);
     }
 
     private IEnumerator DelayRecycle(NormalBullet bullet)

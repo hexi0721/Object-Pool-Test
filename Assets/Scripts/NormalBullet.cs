@@ -19,14 +19,14 @@ public class NormalBullet : MonoBehaviour
     }
 
     // 註解掉 Canon.cs 的 Startcorotine 才能解除這邊的註解
-    // private void Update()
-    // {
-    //     existTime -= Time.deltaTime;
-    //     if (existTime <= 0)
-    //     {
-    //         onRecycle?.Invoke(this);
-    //     }
-    // }
+    private void Update()
+    {
+        existTime -= Time.deltaTime;
+        if (existTime <= 0)
+        {
+            onRecycle?.Invoke(this);
+        }
+    }
 
     public void SetUp(GameObject go, float existTime)
     {
